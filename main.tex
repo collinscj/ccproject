@@ -27,11 +27,376 @@ Next, we look at how these periodic spurious extra signals will translate
 into apparent velocity or displacement noise as a function of frequency,
 given a particular type of motion of the target mirror.
 
+\subsection{Fourier Analysis of periodic systematic errors}
+
+As discussed above, the phase is reconstructed from the measured photodiode
+signals by taking the four-quadrant ratio
+
+\begin{equation}
+R\equiv ArcTan2\left(PD2-PD1,PD2-PD3\right)
+\end{equation}
+
+
+In the case of a perfect interferometer, this would be equal to
+
+\begin{equation}
+R_{ideal}\equiv\frac{Sin\left(\phi\right)-Cos\left(\phi\right)}{Sin\left(\phi\right)+Cos\left(\phi\right)}=\frac{Sin\left(\phi-\frac{\pi}{4}\right)}{Cos\left(\phi-\frac{\pi}{4}\right)}
+\end{equation}
+
+
+In this case the measured phase, $$\phi_{m}$$ can be extracted as
+
+\begin{equation}
+\phi_{m}=ArcTan\left(R_{ideal}\right)=\phi-\frac{\pi}{4}
+\end{equation}
+
+
+Apart from an unimportant and known offset, the phase is recovered.
+
+If one or more of the photodiode signals are not of their ideal form,
+this will lead to a difference between $\phi$ and $\phi_{measured}$.
+To model the most general case would require a numerical model. However,
+we can derive analytically the systematic error in the signal produced
+by certain types of imperfection in the interferometer. We will look
+at a small number of representative examples of these effects. We
+will look at three different effects. First we will consider the case
+of the phase measured at one of the photodiodes having a constant
+offset. This would result from an imperfect wave plate, or unwanted
+birefringence in another component. Next, we consider the effect of
+adding a constant power offset to one of the signals; this may occur
+if there were some component of non-interfering light on the PD, or
+an unwanted DC offset in the photodiode circuit. Finally, we will
+linearly rescale one of the photodiode signals. This represents the
+effect of one PD seeing a different amount of interfering light from
+the others
+
+
+\subsubsection{Phase offset in one photodiode}
+
+We model this by adding an offset, $d$, to the 'Sine' photodiode
+signal. $\phi_{measured}$ will then become
+
+\begin{equation}
+\phi_{measured}=ArcTan\left(\frac{Sin\left(\phi+d\right)-Cos\left(\phi\right)}{Sin\left(\phi+d\right)+Cos\left(\phi\right)}\right)
+\end{equation}
+
+
+If we assume $d$ is small $\left(d\ll1\right)$, we can expand this
+in a Taylor series in . It is more transparent to expand the derivative
+of this w.r.t. $\phi$ (which is 1 in the ideal case). This gives
+us:
+
+\begin{equation}
+\frac{d\phi_{measured}}{d\phi}=1-2Sin\left(\phi\right)Cos\left(\phi\right)d+\left(\frac{1}{2}Sin^{4}\left(\phi\right)+3Sin^{2}\left(\phi\right)Cos^{2}\left(\phi\right)+\frac{3}{2}Cos^{4}\left(\phi\right)\right)d^{2}+o\left(d^{3}\right)
+\end{equation}
+
+
+It is found that the terms of order $d^{n}$ have coefficients of
+the form $Sin^{a}\left(\phi\right)Cos^{2n-a}\left(\phi\right)$.  This
+will produce spurious signals at high spatial frequencies, but if
+$d$ is small these will quickly decrease. It will be convenient to
+express this in terms of the form $Sin\left(n\phi\right)$ and $Cos\left(n\phi\right)$,
+so that the Fourier Transform w.r.t. $\phi$ can be easily found.
+The coefficient of a given Fourier component in $\phi$ will be an
+infinite series in $d$.
+
+It is found that only the even order Fourier Coefficients of $\frac{d\phi_{measured}}{d\phi}$
+are non-zero. These are given by
+
+\begin{equation}
+b_{2n}=\frac{e^{id}}{4}a_{2n-2}+Cos(d)a_{2n}+\frac{e^{-id}}{4}a_{2n+2}
+\end{equation}
+
+
+where the $a_{n}$ are given by
+
+\begin{equation}
+a_{2n}=\left(-\frac{1}{4}\right)^{n}\left(1-e^{2id}\right)^{n}\,_{2}F_{1}\left(\frac{n+1}{2},\frac{n+2}{2},n+1;\left(-4Sin^{2}(d)Cos^{2}(d)\right)\right)
+\end{equation}
+
+
+For $d\ll1$ this gives the result
+
+\begin{equation}
+b_{2m}\approx m\left(\frac{id}{2}\right)^{m}
+\end{equation}
 
 
 
-\section{Conclusion}
-``I always thought something was fundamentally wrong with the universe'' \citep{adams1995hitchhiker}
+\subsubsection{Power offset on one photodiode}
+
+A similar result is observed if the offset terms of the photodiode
+signals do not exactly cancel out. We will examine the case of an
+offset power, $P$, on one of the photodioes. If we add this constant
+power to the Sine Photodiode, we have
+
+\begin{equation}
+\phi_{measured}=ArcTan\left(\frac{P+Sin\left(\phi\right)-Cos\left(\phi\right)}{P+Sin\left(\phi\right)+Cos\left(\phi\right)}\right)
+\end{equation}
+
+
+Proceeding as before to take the derivative of this w.r.t. $\phi$,
+we find
+
+\[
+\frac{d\phi_{measured}}{d\phi}=\frac{1+Psin(\phi)}{1+2Psin(\phi)+P^{2}}=(1+Psin(\phi))\left(1+{\displaystyle \sum_{n=1}^{\infty}\left(iPe^{i\phi}-iPe^{-i\phi}-P^{2}\right)^{n}}\right)
+\]
+
+
+We can again take the Fourier Transform, finding that the Fourier
+Coefficients $b_{m}$ for $\frac{d\phi_{measured}}{d\phi}$ will be
+equal to
+
+\begin{equation}
+b_{m}=\frac{P}{2i}a_{m-1}+a_{m}-\frac{P}{2i}a_{m+1}
+\end{equation}
+
+
+where the $a_{n}$ are given by
+
+\[
+a_{n}=\sum_{j=1}^{\infty}\left((iP)^{n}P^{2}(-P^{2})^{2j}\frac{(1+2j+n)!}{(1+2j)!n!}\,_{2}F_{1}\left(-\frac{1}{2}-j,-j,n+1;\frac{4}{P^{2}}\right)\right)
+\]
+
+
+\begin{equation}
++\sum_{j=1}^{\infty}\left((iP)^{n}(-P^{2})^{2j}\frac{(2j+n)!}{(2j)!n!}\,_{2}F_{1}\left(\frac{1}{2}-j,-j,n+1;\frac{4}{P^{2}}\right)\right)
+\end{equation}
+
+
+For small $P$, these coefficients will be of approximately equal
+to
+
+\begin{equation}
+b_{m}\approx\frac{1}{2}\left(iP\right)^{m}
+\end{equation}
+
+
+
+\subsubsection{Difference in fringe visibility on one photodiode}
+
+Finally, we will look at the case of one photodiode having a different
+visibility to the others ($i.e.$ the Sine or Cosine term being multiplied
+by a constant other than one). The ellipse-fitting algorithm during
+the calibration should prevent this situation from arising, but it
+could result from either the optical visibilty changing, due to a
+large motion of the test-mass, or the gain of one or more of the photodetector
+circuits, changing in between calibrations. As with the previous calculations,
+we start by putting a systematic error onto the Sine Photodiode, then
+proceed to differentiate the unwrapped signal and then to look at
+the behaviour of its Fourier Coefficients. We rescale the Sine signal
+by a factor of $1+k$ to get:
+
+\begin{equation}
+\phi_{measured}=ArcTan\left(\frac{(1+k)Sin\left(\phi\right)-Cos\left(\phi\right)}{(1+k)Sin\left(\phi\right)+Cos\left(\phi\right)}\right)
+\end{equation}
+
+
+We then find
+
+\begin{equation}
+\frac{d\phi_{measured}}{d\phi}=\frac{1+k}{cos^{2}(\phi)+(1+k)^{2}sin^{2}(\phi)}=\frac{1+k}{1+(2k+k^{2})sin^{2}(\phi)}
+\end{equation}
+
+
+The Fourier Coefficients of this are found to be
+
+\[
+b_{n}=\sum_{j=1}^{\infty}(1+k)(k(2+k))^{2j+n+1}2^{-2n-4j-1}\frac{(2j+n+1)!}{(2j+1)!n!}\,_{2}F_{1}\left(-\frac{1}{2}-j,-j,n+1;16\right)
+\]
+
+
+\begin{equation}
++\sum_{j=1}^{\infty}(1+k)(k(2+k))^{2j+n}2^{-2n-4j-1}\frac{(2j+n+1)!}{(2j+1)!n!}\,_{2}F_{1}\left(\frac{1}{2}-j,-j,n+1;16\right)
+\end{equation}
+
+
+We once again find, for small values of $k$, an exponential decay
+of the $a_{n}$ with $n$, with coefficients that depend on $k$.
+For $k<0.1$ the behaviour is well approximated by
+
+\begin{equation}
+\Vert a_{n}\Vert\simeq0.204k^{2}e^{(-2.99-0.033/k)n}
+\end{equation}
+
+
+Similar analyses can be performed for other simple types of errors
+in the photodiode signals, as well as for combinations of these errors,
+but the algebra quickly becomes onerous, and numerical methods are
+preferable.
+
+
+\subsection{Noise spectrum produced by systematic errors given a finite amplitude
+motion}
+
+The effect of these systematic errors on the observed noise spectrum
+will depend on the speed and amplitude of the actual motion being
+measured. For simplicity, we consider only components of systematic
+errors that are periodic over one wavelength. Systematic errors at
+spatial frequencies longer than a wavelength will in general produce
+low frequency drifts in the signal which are easy to account for,
+for instance by recalibrating at different ranges. We have seen that
+the measured phase will be equal to the actual phase, plus an infinite
+series of (eventually decreasing) terms with spatial frequencies that
+are integer multiples of $\frac{1}{\lambda}$, where $\lambda$ is
+the wavelength of light in the interferometer. If the target mirror
+does not move, these systematic errors might produce a DC error on
+the measurement of the position, but there will be no noise added
+at higher frequencies. We will next examine the case where the target
+mirror travels at a constant velocity, $V$. Then the actual phase
+as a function of time will be given by
+
+\[
+\phi\left(t\right)=\frac{2Vt}{\lambda}
+\]
+
+
+The measured phase as a function of time will then satisfy:
+
+\[
+\frac{d\phi_{measured}}{dt}=\frac{d\phi_{measured}}{d\phi}\frac{d\phi}{dt}=\frac{d\phi_{measured}}{d\phi}\frac{2V}{\lambda}=\frac{2V}{\lambda}\left(\sum_{m=-\infty}^{\infty}a_{m}Exp\left(im\frac{4Vt}{\lambda}\right)\right)
+\]
+We can then determine the Fourier Transform of $\phi_{measured}$:
+
+\[
+FT\left(\phi_{measured}\right)=\frac{1}{i\omega}FT\left(\frac{d\phi_{measured}}{dt}\right)=\frac{1}{i\omega}\frac{2V}{\lambda}\left(\sum_{m=-\infty}^{\infty}a_{m}\delta(\omega-m\frac{4Vt}{\lambda})\right)
+\]
+
+
+As expected, the Fourier Transform in the time domain is once again
+a sum of delta functions, rescaled by a velocity-dependent factor.
+
+In the more general case that the test-mass does not simply move with
+a constant velocity, we expect to find that the Fourier peaks in $\frac{d\phi_{measured}}{d\phi}$
+become spread out as well as rescaled, in ways dependent on the functional
+form of $\phi(t)$. We will look at a few particular cases and make
+some general comments, which may help provide some interpretation
+and context to the results of numerical simulations in the following
+section.
+
+We will look at perhaps the next simplest case, in which the displacement
+of the test mass varies sinusoidally with time,
+
+\begin{equation}
+\phi\left(t\right)=ASin\left(\omega_{0}t+\psi\right)
+\end{equation}
+
+
+Where A and $\omega_{0}$ are constants. We split these into 3 sub-cases
+according to the amplitude of the motion:
+
+i. Motion much less than one fringe,
+
+$A\ll2\pi$ or $B\ll2\pi$ .
+
+ii. Motion of order one fringe,
+
+$A\approx2\pi$ or $B\approx2\pi$ . And,
+
+iii. Motion much greater than one fringe,
+
+$A\gg2\pi$ or $B\gg2\pi$ .
+
+
+\subsubsection{Sinusoidal motion much less than one fringe.}
+
+Putting $\phi\left(t\right)=ASin\left(\omega_{0}t+\psi\right)$ with
+$A\ll1$, we will have motion over only a small part of a fringe.
+For simplicity, we will at present assume $\psi=0;$ more general
+values will not significantly affect the following analysis. Qualitatively,
+what we expect to find is that the Fourier Components in the fringe
+unwrapping function of order much less than $\frac{1}{A}$ will contribute
+an additional term at the frequency of the motion itself. Fourier
+Components of order close to $\frac{1}{A}$ may produce aliasing effects,
+while components of order much greater than $\frac{1}{A}$ will directly
+contribute high frequency noise. The assumption that $A\ll1$ means
+that these last contributions will be negligible. as can be seen by
+expanding the Fourier transform as a series
+
+\[
+FT\left(\frac{d\phi_{measured}}{dt}\right)(\omega)=\intop_{-T/2}^{T/2}\left(e^{-i\omega t}\left(\sum a_{n}e^{inAsin\left(\omega_{0}t\right)}\right)\right)dt
+\]
+
+
+Here $T$ is the measurement time, which is assumed to be large. For
+motion much less than one fringe we can expand the outer exponential,
+to give
+
+\[
+FT\left(\frac{d\phi_{measured}}{dt}\right)(\omega)=\intop_{-T/2}^{T/2}\left(e^{-i\omega t}\left(\sum a_{n}(1+inAexp\left(i\omega_{0}t\right)-n^{2}A^{2}exp(2i\omega_{0}t)+...)\right)\right)dt
+\]
+
+
+\[
+\approx\sum(a_{n}niA\delta\left(\omega-\omega_{0}\right)-a_{n}n^{2}A^{2}\delta\left(\omega-2\omega_{0}\right)+...)
+\]
+
+
+As expected, we observe a signal at the frequency of the motion, as
+well as at integer multiples of that frequency, with each higher frequency
+term suppressed by a factor of $A$, if $a_{1}$ is non-zero, or of
+$2A$ is $a_{2}$ is the first non-zero term. These delta functions
+would become spread out first of all due to the finite time of the
+measurement. Additionally, in any real case, the sinusoidal functional
+form of the displacement as a function of time will often be an approximation;
+for instance for a mechanical oscillator, there will likely be phase
+noise due to a non-zero damping term.
+
+
+\subsubsection{Sinusoidal motion of order one fringe}
+
+In the specific case that the motion is over exactly one fringe, we
+can give an exact analytical result. If we assume for the sake of
+simplicity that the measurement time $T$ is some integer multiple,
+$N$ , of the period of the motion, then we find
+
+\[
+FT\left(\frac{d\phi_{measured}}{dt}\right)(\omega)=\intop_{-N\pi/\omega_{0}}^{N\pi/\omega_{0}}\left(e^{-i\omega t}\left(\sum a_{n}e^{inAsin\left(\omega_{0}t\right)}\right)\right)dt
+\]
+
+
+\[
+=N\sum na_{n}J_{0}(nA\frac{\omega}{\omega_{0}})+
+\]
+
+
+More generally, we can split the motion into two sections, one corresponding
+to the motion over one fringe, and the other an additional term due
+to motion over less than one fringe. The first part will give a result
+close to that for motion over exactly one fringe, while the additional
+part will be close to the result of case $i$ above.
+
+
+\subsubsection{Sinusoidal motion much greater than one fringe.}
+
+Putting $\phi\left(t\right)=ASin\left(\omega_{0}t+\psi\right)$ with
+$A\gg1$, we expect all Fourier Components to contribute to the observed
+signal, and they should again contribute without any additional weighting
+factor. This is similar to the case of motion with a constant velocity,
+but in this case the velocity itself varies sinusoidally in the range
+$-A\omega_{0}\leq v\leq A\omega_{0}$. This range will not be evenly
+sampled; the density at a given value of velcoity, $v_{0}$ will be
+given by $\rho(v_{0})=\left(\frac{d}{d\phi}\left(\frac{d\phi}{dt}\right)\right)^{-1}$.
+We can split the Fourier Transform integral into two parts, one of
+which is the contribution from the complete traversed fringes, of
+which we assume there is some number, N, and another contribution
+from the 'remainder' term.
+
+The peaks in the power spectrum of $\phi_{m}\left(\phi\right)$ will
+be broadened to create a 'shelf' in frequency space. The right-hand
+edge of this shelf will be at the frequency corresponding to the highest
+velocity of the test-mass, $i.e.$ at angular frequency $\omega_{m}=\frac{4mV}{\lambda}=\frac{4mA\omega_{0}}{\lambda}$,
+and will extend down to zero frequency. The heights of successive
+shelves will be determined by the coefficients $b_{m}$ calculated
+above.
+
+We can make a stronger statement about the expected shape and height
+of this shelf in frequency space. If the 
+
+
+
+
+.. \citep{adams1995hitchhiker}
 
 \bibliographystyle{plain}
 \bibliography{references}
